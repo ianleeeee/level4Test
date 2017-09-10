@@ -1,32 +1,55 @@
 package level4Test;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
-//i don't think i ever learned how to get text files into variables that i can compare input to
+
 public class anagramFinder {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		Scanner key = new Scanner(System.in);
-		System.out.println("Enter your word:");
-		String test = key.nextLine();
-		findAnagrams(test);
-		
+		System.out.println("Enter the word you would like to find anagrams for:");
+		String word = key.nextLine();
+		// word is the input value
+		findAnagrams(word);
 	}
-	public static void findAnagrams(String input) throws IOException {
-		//add all anagrams to String array, then print them all out at the end
-		//String [] anagrams = new String[];
-		FileReader words = new FileReader("words.txt");
-		BufferedReader read = new BufferedReader(words);
-		System.out.println("Anagrams:");
-		for (int i = 0; i < 235887; i++) {
-			if(read.readLine().matches(input)) {
-				System.out.println(read.readLine());
-			}
+
+	public static void findAnagrams(String word) {
+		ArrayList<String> grams = new ArrayList<String>();
+		try {
+			BufferedReader read = new BufferedReader(new FileReader("words.txt"));
+			String currentLine = null;
+			while ((currentLine = read.readLine()) != null) {
+				String a = "";
+				String b = "";
+				// currentLine is the current line of text file
+				if(currentLine.equals(word)){
+					//this is here so the word doesn't add itself to its anagrams
+				}
+				else{
+				char [] wordArr = word.toCharArray();
+				Arrays.sort(wordArr);
+				char [] lineArr = currentLine.toCharArray();
+				Arrays.sort(lineArr);
+				for(char wa: wordArr){
+					a+=wa;
+				}
+				for(char la: lineArr){
+					b+=la;
+				}
+				if(a.equalsIgnoreCase(b)){
+					grams.add(currentLine);
+				}
+			}}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-
+		System.out.println("The anagrams for " + word+ " are: ");
+		for(String aGram:grams){
+			System.out.println(aGram);
+		}
 	}
-
 }
